@@ -6,11 +6,16 @@ Depend on the `stalkore-sdk-api` Git repository at a reviewed commit. No private
 SDK or adapter source is needed to compile an API consumer. Match the consumer's
 architecture and use a C ABI at every DLL boundary.
 
-The host invokes the retained `kore_sdk_on_startup_v1() -> i32` callback outside
+The host invokes the canonical `stalkore_sdk_on_startup_v1() -> i32` callback outside
 the loader lock. The SDK publishes service tables before invoking plugins.
 `DllMain` remains a Windows loader notification, not the plugin startup contract.
 The host configuration lists DLL paths only; it does not select arbitrary entry
 point names.
+
+Current SDKs prefer that name and accept the previous `kore_sdk_on_startup_v1`
+only when the canonical symbol is absent. Plugins supporting older SDKs can
+export both names into the same initialization state. Callback failure never
+causes the host to invoke another alias. Windows attachment is still separate.
 
 ```rust,no_run
 use stalkore_sdk_api::{SdkApi, Status, scheduler::*};
