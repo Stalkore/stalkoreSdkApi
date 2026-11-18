@@ -28,7 +28,7 @@ let capabilities = api.client()?.probe()?.capabilities;
 There is no API executable or additional runtime DLL to install. The
 `stalkore-sdk-api` crate is linked into each consumer; calls go through the
 versioned C tables exported by the loaded SDK. The first consumer is
-[stalkoreAutoLogin](https://github.com/baphomello/stalkoreAutoLogin).
+[stalkoreAutoLogin](https://github.com/Stalkore/stalkoreAutoLogin).
 
 ```mermaid
 flowchart LR
