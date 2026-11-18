@@ -32,9 +32,12 @@ callbacks must be short, catch their own panics and return a nonzero status to
 disable further delivery. A callback failure does not disable other subscribers.
 
 The SDK pins its carrier and callback code. Pinning prevents code unload; it
-does not own callback context memory. `unsubscribe` prevents future deliveries,
-but a callback already executing may finish. A caller must synchronize with
-that callback before reclaiming context, or retain context for process lifetime.
+does not own callback context memory. `unsubscribe` disables new delivery
+admission. A delivery admitted before it returns may still begin or finish
+afterward; admission occurs before the callback body starts. V1 provides no
+quiescence notification or wait operation. Retain context for process lifetime
+unless an external UI-thread/lifecycle protocol proves all admitted calls ended.
+An empty callback counter alone does not prove that no delivery was admitted.
 No teardown callback is provided. Terminal dispatcher failure requires a new
 process; subscriptions are not silently restarted.
 

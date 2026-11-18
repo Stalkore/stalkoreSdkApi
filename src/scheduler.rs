@@ -39,6 +39,8 @@ impl Scheduler {
     /// # Safety
     /// The callback/context must remain valid until all in-flight calls finish.
     /// The SDK pins callback code; context ownership stays with the plugin.
+    /// A delivery admitted before unsubscribe can begin afterward. V1 has no
+    /// quiescence wait; prefer process-lifetime context unless externally synchronized.
     pub unsafe fn subscribe(
         self,
         callback: TickCallbackV1,
