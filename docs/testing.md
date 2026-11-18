@@ -17,7 +17,7 @@ cargo doc --locked --no-deps --jobs 1
 
 Tests protect C structure sizes/offsets, table validation, status conversion,
 logical client actions and scheduler callback/context forwarding. The private
-SDK and adapter test their implementations separately. sdkAutoLogin additionally
+SDK and adapter test their implementations separately. stalkoreAutoLogin additionally
 uses a synthetic SDK DLL to verify that its production DLL needs only this
 public contract. None of those checks establishes a live client login result.
 

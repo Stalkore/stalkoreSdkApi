@@ -28,14 +28,13 @@ let capabilities = api.client()?.probe()?.capabilities;
 There is no API executable or additional runtime DLL to install. The
 `stalkore-sdk-api` crate is linked into each consumer; calls go through the
 versioned C tables exported by the loaded SDK. The first consumer is
-[sdkAutoLogin](https://github.com/baphomello/sdkAutoLogin).
+[stalkoreAutoLogin](https://github.com/baphomello/stalkoreAutoLogin).
 
 ```mermaid
 flowchart LR
     Plugin[Plugin policy] --> API[stalkoreSdkApi contracts]
     API --> SDK[sdk.dll service tables]
     SDK --> Adapter[stalkoreClientAdapter]
-    Adapter --> Client[Verified client UI thread]
 ```
 
 Current runtime integration targets Windows x86. Contract and mock tests also
