@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Synthetic C ABI table declaration; the type name is not an API key"
+condition = "AND"
+paths = ['''^tests/contracts\.rs$''']
+regexTarget = "line"
+regexes = ['''static SCHEDULER: SchedulerApiV1 = SchedulerApiV1 \{''']

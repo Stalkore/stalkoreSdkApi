@@ -1,0 +1,12 @@
+[package]
+name = "stalkore-sdk-api"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.87"
+description = "Versioned client and scheduler contracts for Stalkore SDK plugins"
+repository = "https://github.com/Stalkore/stalkoreSdkApi"
+license = "MIT"
+publish = false
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_System_LibraryLoader"] }

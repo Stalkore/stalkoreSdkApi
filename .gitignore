@@ -1,0 +1,12 @@
+**/target/
+/AGENTS.md
+*.dll
+*.exe
+*.pdb
+*.lib
+*.exp
+*.ilk
+*.log
+.env
+.env.*
+!.env.example

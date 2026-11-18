@@ -1,0 +1,45 @@
+# stalkoreSdkApi
+
+**The public contract for SDK-owned client services.**
+
+Rust bindings and a [C header](include/stalkore_sdk_api.h) let in-process plugins
+observe logical client state and request guarded operations through `sdk.dll`.
+The SDK implementation and its client adapter are separate private repositories.
+This repository contains no client addresses, profiles, hooks or game binaries.
+
+| Guide | Read it to |
+| --- | --- |
+| [Integration](docs/integration.md) | Connect a plugin to the already loaded SDK |
+| [ABI and lifetime](docs/abi.md) | Understand versions, ownership, threads and failure |
+| [Client services](docs/client.md) | Use snapshots, opaque tokens and logical operations |
+| [Tests](docs/testing.md) | Validate the contract with synthetic providers |
+| [Glossary](GLOSSARY.md) | Follow the shared architectural vocabulary |
+
+Start with the [documentation index](docs/README.md).
+
+```rust,no_run
+use stalkore_sdk_api::SdkApi;
+
+let api = SdkApi::connect()?;
+let capabilities = api.client()?.probe()?.capabilities;
+# Ok::<(), stalkore_sdk_api::Error>(())
+```
+
+There is no API executable or additional runtime DLL to install. The
+`stalkore-sdk-api` crate is linked into each consumer; calls go through the
+versioned C tables exported by the loaded SDK. The first consumer is
+[sdkAutoLogin](https://github.com/baphomello/sdkAutoLogin).
+
+```mermaid
+flowchart LR
+    Plugin[Plugin policy] --> API[stalkoreSdkApi contracts]
+    API --> SDK[sdk.dll service tables]
+    SDK --> Adapter[stalkoreClientAdapter]
+    Adapter --> Client[Verified client UI thread]
+```
+
+Current runtime integration targets Windows x86. Contract and mock tests also
+run without a game. Compatible runtime availability is a separate requirement.
+GitHub source is public; `publish = false` keeps crates.io publication disabled.
+
+[MIT license](LICENSE).
