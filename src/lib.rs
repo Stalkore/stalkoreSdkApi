@@ -2,6 +2,7 @@
 //! This crate contains no client addresses, profiles, hooks or login policy.
 mod api;
 pub mod client;
+pub mod presentation;
 pub mod scheduler;
 pub mod status;
 pub use api::SdkApi;
@@ -10,6 +11,7 @@ pub use status::{Error, Status};
 pub const ABI_VERSION: u32 = 1;
 pub const CLIENT_SERVICE: u32 = 1;
 pub const SCHEDULER_SERVICE: u32 = 2;
+pub const PRESENTATION_SERVICE: u32 = 3;
 pub const QUERY_EXPORT: &std::ffi::CStr = c"StalkoreSdkQueryInterfaceV1";
 
 #[repr(C)]

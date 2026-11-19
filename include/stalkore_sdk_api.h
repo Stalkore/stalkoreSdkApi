@@ -14,6 +14,7 @@ extern "C" {
 typedef int32_t StalkoreStatus;
 enum {
     STALKORE_ABI_V1 = 1, STALKORE_CLIENT_SERVICE = 1, STALKORE_SCHEDULER_SERVICE = 2,
+    STALKORE_PRESENTATION_SERVICE = 3,
     STALKORE_OK = 0, STALKORE_NOT_READY = 1, STALKORE_UNSUPPORTED_CLIENT = 2,
     STALKORE_INVALID_ARGUMENT = 3, STALKORE_WRONG_THREAD = 4, STALKORE_STALE_HANDLE = 5,
     STALKORE_INCOMPATIBLE_CLIENT = 6, STALKORE_INTERNAL_ERROR = 7,
@@ -80,6 +81,19 @@ typedef struct {
     StalkoreStatus (STALKORE_CALL *subscribe)(StalkoreTickCallbackV1 callback, void *context, uint32_t interval_ms, uint32_t *subscription);
     StalkoreStatus (STALKORE_CALL *unsubscribe)(uint32_t subscription);
 } StalkoreSchedulerApiV1;
+
+enum { STALKORE_CAP_WINDOW_VISIBILITY = 1 };
+typedef struct {
+    StalkoreApiHeader header;
+    uint32_t capabilities, visible;
+} StalkorePresentationSnapshotV1;
+
+/* Run on the SDK UI thread. Hiding alone implies no resource reduction. */
+typedef struct {
+    StalkoreApiHeader header;
+    StalkoreStatus (STALKORE_CALL *snapshot)(StalkorePresentationSnapshotV1 *);
+    StalkoreStatus (STALKORE_CALL *set_visible)(uint32_t visible);
+} StalkorePresentationApiV1;
 typedef StalkoreStatus (STALKORE_CALL *StalkoreQueryInterfaceV1)(uint32_t service, uint32_t version, const StalkoreApiHeader **output);
 StalkoreStatus STALKORE_CALL StalkoreSdkQueryInterfaceV1(uint32_t service, uint32_t version, const StalkoreApiHeader **output);
 #ifdef __cplusplus

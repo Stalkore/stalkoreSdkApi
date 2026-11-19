@@ -1,6 +1,6 @@
 use crate::{
-    client::Client, scheduler::Scheduler, status, ApiHeader, Error, QueryInterfaceV1, ABI_VERSION,
-    CLIENT_SERVICE, SCHEDULER_SERVICE,
+    client::Client, presentation::Presentation, scheduler::Scheduler, status, ApiHeader, Error,
+    QueryInterfaceV1, ABI_VERSION, CLIENT_SERVICE, PRESENTATION_SERVICE, SCHEDULER_SERVICE,
 };
 
 #[derive(Clone, Copy)]
@@ -72,5 +72,8 @@ impl SdkApi {
     }
     pub fn scheduler(self) -> Result<Scheduler, Error> {
         self.table(SCHEDULER_SERVICE).map(Scheduler)
+    }
+    pub fn presentation(self) -> Result<Presentation, Error> {
+        self.table(PRESENTATION_SERVICE).map(Presentation)
     }
 }
