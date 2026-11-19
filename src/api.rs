@@ -1,7 +1,8 @@
 use crate::{
-    client::Client, frame_pacing::FramePacing, presentation::Presentation, scheduler::Scheduler,
-    status, ApiHeader, Error, QueryInterfaceV1, ABI_VERSION, CLIENT_SERVICE, FRAME_PACING_SERVICE,
-    PRESENTATION_SERVICE, SCHEDULER_SERVICE,
+    client::Client, frame_pacing::FramePacing, presentation::Presentation,
+    process_memory::ProcessMemory, scheduler::Scheduler, status, ApiHeader, Error,
+    QueryInterfaceV1, ABI_VERSION, CLIENT_SERVICE, FRAME_PACING_SERVICE, PRESENTATION_SERVICE,
+    PROCESS_MEMORY_SERVICE, SCHEDULER_SERVICE,
 };
 
 #[derive(Clone, Copy)]
@@ -79,5 +80,8 @@ impl SdkApi {
     }
     pub fn frame_pacing(self) -> Result<FramePacing, Error> {
         self.table(FRAME_PACING_SERVICE).map(FramePacing)
+    }
+    pub fn process_memory(self) -> Result<ProcessMemory, Error> {
+        self.table(PROCESS_MEMORY_SERVICE).map(ProcessMemory)
     }
 }

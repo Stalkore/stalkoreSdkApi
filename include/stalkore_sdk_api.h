@@ -16,6 +16,7 @@ enum {
     STALKORE_ABI_V1 = 1, STALKORE_CLIENT_SERVICE = 1, STALKORE_SCHEDULER_SERVICE = 2,
     STALKORE_PRESENTATION_SERVICE = 3,
     STALKORE_FRAME_PACING_SERVICE = 4,
+    STALKORE_PROCESS_MEMORY_SERVICE = 5,
     STALKORE_OK = 0, STALKORE_NOT_READY = 1, STALKORE_UNSUPPORTED_CLIENT = 2,
     STALKORE_INVALID_ARGUMENT = 3, STALKORE_WRONG_THREAD = 4, STALKORE_STALE_HANDLE = 5,
     STALKORE_INCOMPATIBLE_CLIENT = 6, STALKORE_INTERNAL_ERROR = 7,
@@ -109,6 +110,34 @@ typedef struct {
     StalkoreStatus (STALKORE_CALL *snapshot)(StalkoreFramePacingSnapshotV1 *);
     StalkoreStatus (STALKORE_CALL *set_limit)(uint32_t fps);
 } StalkoreFramePacingApiV1;
+
+enum {
+    STALKORE_CAP_RESIDENCY_RECLAIM = 1,
+    STALKORE_FLAG_CONTEXT_READY = 1,
+    STALKORE_FLAG_WINDOW_HIDDEN = 2
+};
+typedef struct {
+    uint64_t private_bytes, working_set_bytes, page_fault_count;
+} StalkoreMemoryCountersV1;
+typedef struct {
+    StalkoreApiHeader header;
+    uint32_t capabilities, flags, context_token, reserved;
+    StalkoreMemoryCountersV1 counters;
+} StalkoreProcessMemorySnapshotV1;
+typedef struct {
+    StalkoreApiHeader header;
+    uint64_t elapsed_microseconds;
+    StalkoreMemoryCountersV1 before, after;
+} StalkoreResidencyReclaimResultV1;
+
+/* Both calls require SDK READY/TICK on the owning UI thread. Tokens are opaque.
+   Reclaim requires a matching nonzero token and a ready, hidden context. Each
+   call makes one paging request; it does not release assets or private commit. */
+typedef struct {
+    StalkoreApiHeader header;
+    StalkoreStatus (STALKORE_CALL *snapshot)(StalkoreProcessMemorySnapshotV1 *);
+    StalkoreStatus (STALKORE_CALL *reclaim_residency)(uint32_t context_token, StalkoreResidencyReclaimResultV1 *);
+} StalkoreProcessMemoryApiV1;
 typedef StalkoreStatus (STALKORE_CALL *StalkoreQueryInterfaceV1)(uint32_t service, uint32_t version, const StalkoreApiHeader **output);
 StalkoreStatus STALKORE_CALL StalkoreSdkQueryInterfaceV1(uint32_t service, uint32_t version, const StalkoreApiHeader **output);
 #ifdef __cplusplus

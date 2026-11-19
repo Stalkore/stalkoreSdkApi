@@ -11,8 +11,8 @@ callers must still supply valid, aligned, readable/writable memory of the stated
 size. This ABI is an in-process cooperation contract, not a memory sandbox.
 
 `StalkoreSdkQueryInterfaceV1(service, version, output)` returns a process-lifetime
-immutable table. IDs 1–4 select client, scheduler, presentation and frame-pacing
-services; each currently uses version 1. Unknown service/version and an SDK not yet initialized fail
+immutable table. IDs 1–5 select client, scheduler, presentation, frame-pacing and
+process-memory services; each currently uses version 1. Unknown service/version and an SDK not yet initialized fail
 explicitly. No function from an incompatible or truncated table may be called.
 An incompatible table change requires a new version. Optional new services use
 new IDs; existing IDs and fields retain their meanings.
@@ -24,6 +24,7 @@ new IDs; existing IDs and fields retain their meanings.
 | `READY`, `TICK` | Client owning UI thread; client operations are allowed |
 | `FAILED`, `STOPPED` | May run on the SDK worker; do not call client operations |
 | Snapshot and client actions | Verified owning UI thread; wrong-thread calls fail |
+| Process-memory snapshot / residency reclaim | SDK `READY`/`TICK` on the owning UI thread; tokens and visibility are revalidated |
 
 The SDK owns one dispatcher and multiplexes subscriptions. Each subscription
 receives `READY` before its first `TICK`; requested intervals are clamped to
@@ -46,6 +47,11 @@ ephemeral identities, never addresses. Native actions revalidate current
 objects and expected phases. After an operation that can retire objects,
 obtain a fresh snapshot before another logical action. PIN digits are the
 exceptional multi-call sequence: each step revalidates its exact input count.
+
+Process-memory context tokens follow the same opaque lifetime rule and are not
+interchangeable with mode or dialog tokens. Reclamation is one guarded operating
+system paging request, not an asset-release or private-commit contract. See the
+[process-memory guide](process-memory.md) for eligibility and failure behavior.
 
 Credential byte spans are borrowed only for the call, exclude the trailing NUL
 and cannot contain embedded NULs. A provider owns any asynchronous storage it

@@ -9,3 +9,4 @@
 5. [Glossary](../GLOSSARY.md): names used across the repositories.
 6. [Presentation](presentation.md): optional window visibility without native handles.
 7. [Frame pacing](frame-pacing.md): frame limits, measurements and shared-thread timing.
+8. [Process memory](process-memory.md): counters, opaque context tokens and explicit residency requests.

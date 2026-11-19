@@ -14,6 +14,7 @@ This repository contains no client addresses, profiles, hooks or game binaries.
 | [Client services](docs/client.md) | Use snapshots, opaque tokens and logical operations |
 | [Presentation](docs/presentation.md) | Control supported window visibility on the SDK thread |
 | [Frame pacing](docs/frame-pacing.md) | Apply supported frame-end limits and observe actual frame rate |
+| [Process memory](docs/process-memory.md) | Inspect counters and request guarded residency reclamation |
 | [Tests](docs/testing.md) | Validate the contract with synthetic providers |
 | [Glossary](GLOSSARY.md) | Follow the shared architectural vocabulary |
 
