@@ -15,6 +15,7 @@ typedef int32_t StalkoreStatus;
 enum {
     STALKORE_ABI_V1 = 1, STALKORE_CLIENT_SERVICE = 1, STALKORE_SCHEDULER_SERVICE = 2,
     STALKORE_PRESENTATION_SERVICE = 3,
+    STALKORE_FRAME_PACING_SERVICE = 4,
     STALKORE_OK = 0, STALKORE_NOT_READY = 1, STALKORE_UNSUPPORTED_CLIENT = 2,
     STALKORE_INVALID_ARGUMENT = 3, STALKORE_WRONG_THREAD = 4, STALKORE_STALE_HANDLE = 5,
     STALKORE_INCOMPATIBLE_CLIENT = 6, STALKORE_INTERNAL_ERROR = 7,
@@ -94,6 +95,20 @@ typedef struct {
     StalkoreStatus (STALKORE_CALL *snapshot)(StalkorePresentationSnapshotV1 *);
     StalkoreStatus (STALKORE_CALL *set_visible)(uint32_t visible);
 } StalkorePresentationApiV1;
+
+enum { STALKORE_CAP_FRAME_RATE_LIMIT = 1, STALKORE_FLAG_FRAME_OBSERVER_ATTACHED = 1 };
+typedef struct {
+    StalkoreApiHeader header;
+    uint32_t capabilities, minimum_fps, maximum_fps, target_fps;
+    uint32_t observed_millifps, observed_window_milliseconds, frame_count, flags;
+} StalkoreFramePacingSnapshotV1;
+
+/* UI-thread requests. Native frame-end waits can delay logic on that thread. */
+typedef struct {
+    StalkoreApiHeader header;
+    StalkoreStatus (STALKORE_CALL *snapshot)(StalkoreFramePacingSnapshotV1 *);
+    StalkoreStatus (STALKORE_CALL *set_limit)(uint32_t fps);
+} StalkoreFramePacingApiV1;
 typedef StalkoreStatus (STALKORE_CALL *StalkoreQueryInterfaceV1)(uint32_t service, uint32_t version, const StalkoreApiHeader **output);
 StalkoreStatus STALKORE_CALL StalkoreSdkQueryInterfaceV1(uint32_t service, uint32_t version, const StalkoreApiHeader **output);
 #ifdef __cplusplus

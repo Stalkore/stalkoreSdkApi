@@ -13,6 +13,7 @@ This repository contains no client addresses, profiles, hooks or game binaries.
 | [ABI and lifetime](docs/abi.md) | Understand versions, ownership, threads and failure |
 | [Client services](docs/client.md) | Use snapshots, opaque tokens and logical operations |
 | [Presentation](docs/presentation.md) | Control supported window visibility on the SDK thread |
+| [Frame pacing](docs/frame-pacing.md) | Apply supported frame-end limits and observe actual frame rate |
 | [Tests](docs/testing.md) | Validate the contract with synthetic providers |
 | [Glossary](GLOSSARY.md) | Follow the shared architectural vocabulary |
 

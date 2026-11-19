@@ -11,8 +11,8 @@ callers must still supply valid, aligned, readable/writable memory of the stated
 size. This ABI is an in-process cooperation contract, not a memory sandbox.
 
 `StalkoreSdkQueryInterfaceV1(service, version, output)` returns a process-lifetime
-immutable table. IDs 1 and 2 select client and scheduler services; both currently
-use version 1. Unknown service/version and an SDK not yet initialized fail
+immutable table. IDs 1–4 select client, scheduler, presentation and frame-pacing
+services; each currently uses version 1. Unknown service/version and an SDK not yet initialized fail
 explicitly. No function from an incompatible or truncated table may be called.
 An incompatible table change requires a new version. Optional new services use
 new IDs; existing IDs and fields retain their meanings.
