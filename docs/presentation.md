@@ -9,7 +9,7 @@ Older runtimes return `UNKNOWN_SERVICE`; client and scheduler tables are unchang
 `snapshot()` returns supported capabilities and whether the main window is visible.
 `CAP_WINDOW_VISIBILITY` permits `set_visible(false)` and `set_visible(true)`.
 Showing does not request foreground activation. The SDK validates ownership and
-performs the operation on the window thread. A missing/replaced window or wrong
+performs the operation on the window thread. A missing/incompatible window or wrong
 thread returns an error rather than selecting an auxiliary window.
 
 Hiding does not suspend the process or establish any reduction in rendering, CPU,
