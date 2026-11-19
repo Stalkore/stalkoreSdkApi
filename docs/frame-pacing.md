@@ -8,7 +8,8 @@ their layouts. All calls require an SDK READY/TICK on the owning UI thread.
 
 `snapshot()` reports capabilities, the backend's supported FPS range, applied
 target, observed frames per second multiplied by 1000, observation duration and
-a wrapping frame counter. A zero observation duration means no complete sample
+a wrapping native frame-end counter. This is a call rate, not a measurement of
+GPU-completed or displayed frames. A zero observation duration means no complete sample
 is available. The attached flag indicates a current native observer.
 
 `set_limit(0)` preserves native timing. Other limits must be within the range
