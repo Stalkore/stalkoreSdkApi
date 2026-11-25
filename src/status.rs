@@ -29,7 +29,7 @@ impl Error {
             STALE_HANDLE => "client object is no longer current",
             INCOMPATIBLE_CLIENT => "client identity or native method is incompatible",
             SDK_UNAVAILABLE => {
-                "SDK API is unavailable; rebuild sdk.dll and start through the Forwarder"
+                "SDK API is unavailable; rebuild the configured SDK carrier and check startup"
             }
             UNSUPPORTED_VERSION => "SDK API version or table size is incompatible",
             UNKNOWN_SERVICE => "requested SDK service is unavailable",

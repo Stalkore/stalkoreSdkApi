@@ -19,13 +19,47 @@ impl SdkApi {
                 GetModuleHandleExW, GetModuleHandleW, GetProcAddress,
                 GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, GET_MODULE_HANDLE_EX_FLAG_PIN,
             };
+            use windows_sys::Win32::System::{
+                ProcessStatus::K32EnumProcessModules, Threading::GetCurrentProcess,
+            };
             let name: Vec<u16> = "sdk.dll".encode_utf16().chain([0]).collect();
             let module = unsafe { GetModuleHandleW(name.as_ptr()) };
-            if module.is_null() {
-                return Err(Error(status::SDK_UNAVAILABLE));
-            }
-            let symbol = unsafe { GetProcAddress(module, crate::QUERY_EXPORT.as_ptr().cast()) }
-                .ok_or(Error(status::SDK_UNAVAILABLE))?;
+            let legacy = if module.is_null() {
+                None
+            } else {
+                unsafe { GetProcAddress(module, crate::QUERY_EXPORT.as_ptr().cast()) }
+            };
+            let symbol = if let Some(symbol) = legacy {
+                symbol
+            } else {
+                // The generated DLL has a client-selected filename. Find its
+                // unique versioned SDK export instead of guessing that name.
+                let mut modules = [std::ptr::null_mut(); 1024];
+                let capacity = std::mem::size_of_val(&modules) as u32;
+                let mut required = 0u32;
+                if unsafe {
+                    K32EnumProcessModules(
+                        GetCurrentProcess(),
+                        modules.as_mut_ptr(),
+                        capacity,
+                        &mut required,
+                    )
+                } == 0
+                    || required > capacity
+                {
+                    return Err(Error(status::SDK_UNAVAILABLE));
+                }
+                let mut matches = modules[..required as usize / std::mem::size_of_val(&module)]
+                    .iter()
+                    .filter_map(|module| unsafe {
+                        GetProcAddress(*module, crate::QUERY_EXPORT.as_ptr().cast())
+                    });
+                let first = matches.next().ok_or(Error(status::SDK_UNAVAILABLE))?;
+                if matches.next().is_some() {
+                    return Err(Error(status::SDK_UNAVAILABLE));
+                }
+                first
+            };
             let mut pinned = std::ptr::null_mut();
             if unsafe {
                 GetModuleHandleExW(

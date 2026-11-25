@@ -3,7 +3,9 @@
 **The public contract for SDK-owned client services.**
 
 Rust bindings and a [C header](include/stalkore_sdk_api.h) let in-process plugins
-observe logical client state and request guarded operations through `sdk.dll`.
+observe logical client state and request guarded operations through the loaded
+SDK provider. That provider may be an embedded forwarding DLL or a separate
+`sdk.dll`.
 The SDK implementation and its client adapter are separate private repositories.
 This repository contains no client addresses, profiles, hooks or game binaries.
 
@@ -37,7 +39,7 @@ versioned C tables exported by the loaded SDK. The first consumer is
 ```mermaid
 flowchart LR
     Plugin[Plugin policy] --> API[stalkoreSdkApi contracts]
-    API --> SDK[sdk.dll service tables]
+    API --> SDK[Loaded SDK provider service tables]
     SDK --> Adapter[stalkoreClientAdapter]
 ```
 

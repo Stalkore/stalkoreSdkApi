@@ -44,8 +44,12 @@ let subscription = unsafe {
 # Ok::<(), stalkore_sdk_api::Error>(())
 ```
 
-`connect()` resolves `StalkoreSdkQueryInterfaceV1` in the already loaded
-`sdk.dll` and pins its module. It never loads a runtime or starts a process.
+`connect()` first checks an already loaded `sdk.dll` for compatibility. If it
+is absent, it enumerates loaded modules and requires exactly one provider of
+`StalkoreSdkQueryInterfaceV1`; this supports a generated forwarding DLL with an
+embedded SDK without knowing that DLL's filename. It pins the provider module.
+It never loads a runtime or starts a process. An absent or ambiguous provider
+returns `SDK_UNAVAILABLE`.
 Use the returned tables for repeated operations rather than reconnecting on
 every production tick. Zero from startup acknowledges submission; asynchronous
 readiness or failure arrives through the scheduler.
