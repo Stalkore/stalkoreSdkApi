@@ -2,6 +2,17 @@
 
 [Home](../README.md)
 
+## Learn the contract
+
+Read [ABI and lifetime](abi.md) before following a service call. Then trace
+[`SdkApi::connect`](../src/api.rs) → [`SdkApi::table`](../src/api.rs) →
+one wrapper in [`client`](../src/client.rs) or
+[`scheduler`](../src/scheduler.rs). Ask which side owns the table, callback
+context, byte buffers and thread. The C header and Rust types must describe
+the same ABI; a client executable update alone does not change it.
+
+## Reference guides
+
 1. [Integration](integration.md): plugin startup and a scheduled callback.
 2. [ABI and lifetime](abi.md): versions, ownership and thread rules.
 3. [Client services](client.md): observations and guarded actions.
