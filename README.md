@@ -17,6 +17,7 @@ This repository contains no client addresses, profiles, hooks or game binaries.
 | [Process memory](docs/process-memory.md) | Inspect counters and request guarded residency reclamation |
 | [Tests](docs/testing.md) | Validate the contract with synthetic providers |
 | [Glossary](GLOSSARY.md) | Follow the shared architectural vocabulary |
+| [Client updates](docs/client-updates.md) | Decide whether an executable update requires any public API change |
 
 Start with the [documentation index](docs/README.md).
 

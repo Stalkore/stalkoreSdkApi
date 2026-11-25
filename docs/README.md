@@ -10,3 +10,4 @@
 6. [Presentation](presentation.md): optional window visibility without native handles.
 7. [Frame pacing](frame-pacing.md): frame limits, measurements and shared-thread timing.
 8. [Process memory](process-memory.md): counters, opaque context tokens and explicit residency requests.
+9. [Client update maintenance](client-updates.md): keep build-specific details in the adapter and revise the ABI only deliberately.
